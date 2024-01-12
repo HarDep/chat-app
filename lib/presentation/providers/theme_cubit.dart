@@ -8,4 +8,5 @@ class ThemeCubit extends Cubit<bool> {
     emit(false);
   }
 
+  void change(bool isDark) => emit(isDark);
 }

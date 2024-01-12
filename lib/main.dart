@@ -1,3 +1,9 @@
+import 'package:chat_app/presentation/providers/chats_selection_cubit.dart';
+import 'package:chat_app/presentation/providers/home_cubit.dart';
+import 'package:chat_app/presentation/providers/profile_verify_cubit.dart';
+import 'package:chat_app/presentation/providers/settings_cubit.dart';
+import 'package:chat_app/presentation/providers/sign_in_cubit.dart';
+import 'package:chat_app/presentation/providers/splash_cubit.dart';
 import 'package:chat_app/presentation/providers/theme_cubit.dart';
 import 'package:chat_app/presentation/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +25,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
-      providers: [],
+      providers: [
+        BlocProvider(create: (_) => SplashCubit()..init()),
+        BlocProvider(create: (_) => SignInCubit()),
+        BlocProvider(create: (_) => ProfileVerifyCubit()),
+        BlocProvider(create: (_) => HomeCubit()),
+        BlocProvider(create: (_) => SettingCubit()),
+        BlocProvider(create: (_) => ChatSelectionCubit()..init()),
+      ],
       child: BlocProvider(
         create: (_) => ThemeCubit()..init(),
         child: BlocBuilder<ThemeCubit, bool>(

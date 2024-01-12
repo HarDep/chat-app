@@ -1,29 +1,35 @@
+import 'package:chat_app/presentation/providers/home_cubit.dart';
 import 'package:chat_app/presentation/screens/chats_screen.dart';
 import 'package:chat_app/presentation/screens/chats_selection_screen.dart';
 import 'package:chat_app/presentation/screens/settings_screen.dart';
 import 'package:chat_app/utils/navigator_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeScreeen extends StatelessWidget {
   const HomeScreeen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: SafeArea(
         child: Expanded(
           child: Column(
             children: [
               Expanded(
-                child: IndexedStack(
-                  index: 0,
-                  children: [
-                    ChatsScreen(),
-                    SettingsScreen(),
-                  ],
+                child: BlocBuilder<HomeCubit, int>(
+                  builder: (context, state) {
+                    return IndexedStack(
+                      index: state,
+                      children: const [
+                        ChatsScreen(),
+                        SettingsScreen(),
+                      ],
+                    );
+                  },
                 ),
               ),
-              _NavigationBar(),
+              const _NavigationBar(),
             ],
           ),
         ),
@@ -43,7 +49,7 @@ class _NavigationBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () => context.read<HomeCubit>().change(0),
             child: const Text('chats'),
           ),
           FloatingActionButton(
@@ -53,7 +59,7 @@ class _NavigationBar extends StatelessWidget {
             child: const Icon(Icons.add),
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () => context.read<HomeCubit>().change(1),
             child: const Text('Settings'),
           ),
         ],
