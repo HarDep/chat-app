@@ -10,31 +10,36 @@ class SignInScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SignInCubit, SignInState>(
-      listener: (context, state) {
-        if (state == SignInState.none) {
-          pushReplacementPage(context, const VerifyProfileScreen());
-          return;
-        }
-        pushAndRemoveUntilPage(context, const HomeScreeen());
-      },
-      child: Scaffold(
-        body: SafeArea(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Bienvenido a Chat App'),
-                ElevatedButton(
-                  onPressed: () {
-                    context.read<SignInCubit>().signIn();
-                  },
-                  child: const Text('Conectar con Google'),
+    return BlocProvider(
+      create: (context) => SignInCubit(),
+      child: BlocConsumer<SignInCubit, SignInState>(
+        listener: (context, state) {
+          if (state == SignInState.none) {
+            pushReplacementPage(context, const VerifyProfileScreen());
+            return;
+          }
+          pushAndRemoveUntilPage(context, const HomeScreeen());
+        },
+        builder: (context, state) {
+          return Scaffold(
+            body: SafeArea(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Bienvenido a Chat App'),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.read<SignInCubit>().signIn();
+                      },
+                      child: const Text('Conectar con Google'),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

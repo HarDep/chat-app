@@ -9,41 +9,49 @@ class VerifyProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ProfileVerifyCubit, ProfileState>(
-      listener: (context, state) {
-        if (state.success) {
-          pushReplacementPage(context, const HomeScreeen());
-        }
-      },
-      child: Scaffold(
-        body: SafeArea(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Verifica tu identidad'),
-                const Placeholder(
-                  fallbackHeight: 100,
-                  fallbackWidth: 100,
+    return BlocProvider(
+      create: (context) => ProfileVerifyCubit(),
+      child: BlocConsumer<ProfileVerifyCubit, ProfileState>(
+        listener: (context, state) {
+          if (state.success) {
+            pushReplacementPage(context, const HomeScreeen());
+          }
+        },
+        builder: (context, state) {
+          return Scaffold(
+            body: SafeArea(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Verifica tu identidad'),
+                    const Placeholder(
+                      fallbackHeight: 100,
+                      fallbackWidth: 100,
+                    ),
+                    IconButton(
+                      onPressed: () =>
+                          context.read<ProfileVerifyCubit>().pickImage(),
+                      icon: const Icon(Icons.photo),
+                    ),
+                    const Text('Pon tu nombre'),
+                    TextField(
+                      controller:
+                          context.read<ProfileVerifyCubit>().nameController,
+                      decoration: const InputDecoration(
+                          hintText: 'Como quieres que te reconozcan'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () =>
+                          context.read<ProfileVerifyCubit>().getReady(),
+                      child: const Text('Comenzar a chatear'),
+                    ),
+                  ],
                 ),
-                IconButton(
-                  onPressed: () => context.read<ProfileVerifyCubit>().pickImage(),
-                  icon: const Icon(Icons.photo),
-                ),
-                const Text('Pon tu nombre'),
-                TextField(
-                  controller: context.read<ProfileVerifyCubit>().nameController,
-                  decoration: const InputDecoration(
-                      hintText: 'Como quieres que te reconozcan'),
-                ),
-                ElevatedButton(
-                  onPressed: () => context.read<ProfileVerifyCubit>().getReady(),
-                  child: const Text('Comenzar a chatear'),
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

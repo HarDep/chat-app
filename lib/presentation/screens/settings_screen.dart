@@ -12,44 +12,49 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final stream = StreamChat.of(context).client.state.currentUserStream;
-    return Scaffold(
-      body: StreamBuilder(
-        stream: stream,
-        builder: (_, builder) {
-          if (builder.hasData) {
-            final user = builder.data;
-            final image = user?.extraData['image'];
-            return Center(
-              child: Column(
-                children: [
-                  if (image != null)
-                    Image.network(image as String)
-                  else
-                    const Placeholder(),
-                  BlocBuilder<ThemeCubit, bool>(
-                    builder: (context, state) {
-                      return Switch(
-                        value: state,
-                        onChanged: (value) =>
-                            context.read<ThemeCubit>().change(value),
-                      );
-                    },
-                  ),
-                  BlocListener<SettingCubit, void>(
-                    listener: (context, state) {
-                      pushAndRemoveUntilPage(context, const SignInScreen());
-                    },
-                    child: ElevatedButton(
-                      onPressed: () => context.read<SettingCubit>().logout(),
-                      child: const Text('logout'),
+    return BlocProvider(
+      create: (context) => SettingCubit(),
+      child: Scaffold(
+        body: StreamBuilder(
+          stream: stream,
+          builder: (_, builder) {
+            if (builder.hasData) {
+              final user = builder.data;
+              final image = user?.extraData['image'];
+              return Center(
+                child: Column(
+                  children: [
+                    if (image != null)
+                      Image.network(image as String)
+                    else
+                      const Placeholder(),
+                    BlocBuilder<ThemeCubit, bool>(
+                      builder: (context, state) {
+                        return Switch(
+                          value: state,
+                          onChanged: (value) =>
+                              context.read<ThemeCubit>().change(value),
+                        );
+                      },
                     ),
-                  ),
-                ],
-              ),
-            );
-          }
-          return const CircularProgressIndicator();
-        },
+                    BlocConsumer<SettingCubit, void>(
+                      listener: (context, state) {
+                        pushAndRemoveUntilPage(context, const SignInScreen());
+                      },
+                      builder: (context, state) {
+                        return ElevatedButton(
+                          onPressed: () => context.read<SettingCubit>().logout(),
+                          child: const Text('logout'),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              );
+            }
+            return const CircularProgressIndicator();
+          },
+        ),
       ),
     );
   }

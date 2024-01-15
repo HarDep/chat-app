@@ -11,26 +11,29 @@ class HomeScreeen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Expanded(
-          child: Column(
-            children: [
-              Expanded(
-                child: BlocBuilder<HomeCubit, int>(
-                  builder: (context, state) {
-                    return IndexedStack(
-                      index: state,
-                      children: const [
-                        ChatsScreen(),
-                        SettingsScreen(),
-                      ],
-                    );
-                  },
+    return BlocProvider(
+      create: (context) => HomeCubit(),
+      child: Scaffold(
+        body: SafeArea(
+          child: Expanded(
+            child: Column(
+              children: [
+                Expanded(
+                  child: BlocBuilder<HomeCubit, int>(
+                    builder: (context, state) {
+                      return IndexedStack(
+                        index: state,
+                        children: const [
+                          ChatsScreen(),
+                          SettingsScreen(),
+                        ],
+                      );
+                    },
+                  ),
                 ),
-              ),
-              const _NavigationBar(),
-            ],
+                const _NavigationBar(),
+              ],
+            ),
           ),
         ),
       ),

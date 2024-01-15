@@ -1,4 +1,4 @@
-import 'package:chat_app/models/chat_user.dart';
+import 'package:chat_app/domain/models/chat_user.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 

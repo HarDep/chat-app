@@ -9,9 +9,11 @@ class ChatsSelectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //el provider de isgroup debe ir aqui?
-    return BlocProvider(
-      create: (_) => IsGroupCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => IsGroupCubit()),
+        BlocProvider(create: (_) => ChatSelectionCubit()..init()),
+      ],
       child: BlocBuilder<IsGroupCubit, bool>(
         builder: (context, isGroup) {
           return BlocBuilder<ChatSelectionCubit, List<ChatUserState>>(

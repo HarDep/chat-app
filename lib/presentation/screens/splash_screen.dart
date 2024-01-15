@@ -11,27 +11,30 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SplashCubit, SplashState>(
-      listener: (context, state) {
-        if (state == SplashState.none) {
-          pushReplacementPage(context, const SignInScreen());
-          return;
-        } else if (state == SplashState.newUser) {
-          pushReplacementPage(context, const VerifyProfileScreen());
-          return;
-        }
-        pushReplacementPage(context, const HomeScreeen());
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Splash'),
-          centerTitle: true,
-        ),
-        body: SafeArea(
-          child: Center(
-            child: ElevatedButton(
-              onPressed: () {},
-              child: const Text('iniciar'),
+    return BlocProvider(
+      create: (context) => SplashCubit()..init(),
+      child: BlocListener<SplashCubit, SplashState>(
+        listener: (context, state) {
+          if (state == SplashState.none) {
+            pushReplacementPage(context, const SignInScreen());
+            return;
+          } else if (state == SplashState.newUser) {
+            pushReplacementPage(context, const VerifyProfileScreen());
+            return;
+          }
+          pushReplacementPage(context, const HomeScreeen());
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Splash'),
+            centerTitle: true,
+          ),
+          body: SafeArea(
+            child: Center(
+              child: ElevatedButton(
+                onPressed: () {},
+                child: const Text('iniciar'),
+              ),
             ),
           ),
         ),
