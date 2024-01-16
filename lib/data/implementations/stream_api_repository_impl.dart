@@ -9,9 +9,9 @@ class StreamApiRepositoryImpl implements StreamApiRepository {
       : _client = client;
 
   @override
-  Future<bool> connectIfExists(String userId) {
+  Future<bool> connectIfExists(String userId) async {
     // TODO: implement connectIfExists
-    throw UnimplementedError();
+    return false;
   }
 
   @override
@@ -28,31 +28,48 @@ class StreamApiRepositoryImpl implements StreamApiRepository {
   @override
   Future<Channel> createGroup(String id, String name, List<String> members,
       {String? image}) async {
-    // TODO: implement createGroup
-    throw UnimplementedError();
+    final channel = _client.channel('messaging', id: id, extraData: {
+      'name': name,
+      'image': image, //y si no hay?
+      'members': [_client.state.currentUser!.id, ...members],
+    });
+    await channel.watch();
+    return channel;
   }
 
   @override
-  Future<Channel> createSingleChat(String friendId) {
-    // TODO: implement createSingleChat
-    throw UnimplementedError();
+  Future<Channel> createSingleChat(String friendId) async {
+    final channel = _client.channel('messaging',
+        id: '${_client.state.currentUser!.id.hashCode}${friendId.hashCode}',
+        extraData: {
+          'members': [friendId, _client.state.currentUser!.id],
+        });
+    await channel.watch();
+    return channel;
   }
 
   @override
-  Future<List<ChatUser>> getChatUsers() {
-    // TODO: implement getChatUsers
-    throw UnimplementedError();
+  Future<List<ChatUser>> getChatUsers() async {
+    final result = await _client.queryUsers();
+    final chatUsers = result.users
+        .where((elem) => elem.id != _client.state.currentUser!.id)
+        .map((e) => ChatUser(
+              name: e.name,
+              id: e.id,
+              image: e.extraData['image'] as String,
+            ))
+        .toList();
+    return chatUsers;
   }
 
   @override
-  Future<String> getToken(String userId) {
-    // TODO: implement getToken
-    throw UnimplementedError();
+  Future<String> getToken(String userId) async {
+    final token = _client.devToken(userId).rawValue;
+    return token;
   }
 
   @override
-  Future<void> logout() {
-    // TODO: implement logout
-    throw UnimplementedError();
+  Future<void> logout() async {
+    await _client.disconnectUser();
   }
 }

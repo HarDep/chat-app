@@ -11,6 +11,7 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //stream?
     final stream = StreamChat.of(context).client.state.currentUserStream;
     return BlocProvider(
       create: (context) => SettingCubit(),
