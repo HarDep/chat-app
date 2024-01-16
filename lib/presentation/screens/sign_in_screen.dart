@@ -11,7 +11,7 @@ class SignInScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SignInCubit(),
+      create: (context) => SignInCubit(context.read(), context.read()),
       child: BlocConsumer<SignInCubit, SignInState>(
         listener: (context, state) {
           if (state == SignInState.none) {

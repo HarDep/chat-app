@@ -1,4 +1,5 @@
-import 'package:chat_app/presentation/screens/channel_page.dart';
+import 'package:chat_app/presentation/screens/channel_screen.dart';
+import 'package:chat_app/utils/navigator_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -20,12 +21,7 @@ class ChatsScreen extends StatelessWidget {
           onRefresh: controller.refresh,
           child: StreamChannelListView(
             controller: controller,
-            onChannelTap: (channel) => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const ChannelPage(),
-              ),
-            ),
+            onChannelTap: (channel) => pushPage(context, ChannelScreen(channel: channel,),),
           ),
         ),
     );

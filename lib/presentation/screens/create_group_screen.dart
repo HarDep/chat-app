@@ -1,5 +1,7 @@
 import 'package:chat_app/presentation/providers/chats_selection_cubit.dart';
 import 'package:chat_app/presentation/providers/create_group_cubit.dart';
+import 'package:chat_app/presentation/screens/channel_screen.dart';
+import 'package:chat_app/utils/navigator_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,10 +12,12 @@ class CreateGroupScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => CreateGroupCubit(selectedUsers),
+      create: (context) => CreateGroupCubit(selectedUsers, context.read(), context.read()),
       child: BlocConsumer<CreateGroupCubit, CreationGroupState>(
         listener: (context, state) {
-          // TODO: implementar cambiar foto o crear grupo
+          if (state.channel != null) {
+            pushReplacementPage(context, ChannelScreen(channel: state.channel!));
+          }
         },
         builder: (context, state) {
           return Scaffold(
@@ -23,18 +27,20 @@ class CreateGroupScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text('Verifica tus datos'),
+                    if(state.file != null)
+                    Image.file(state.file!, height: 100,)
+                    else
                     const Placeholder(
                       fallbackHeight: 100,
                       fallbackWidth: 100,
                     ),
                     IconButton(
-                      onPressed: () {
-                        //TODO: cambiar foto
-                      },
+                      onPressed: () => context.read<CreateGroupCubit>().pickImage(),
                       icon: const Icon(Icons.photo),
                     ),
                     TextField(
-                      controller: context.read<CreateGroupCubit>().nameTextController,
+                      controller:
+                          context.read<CreateGroupCubit>().nameTextController,
                       decoration: const InputDecoration(
                         hintText: 'Nombre del grupo',
                       ),
@@ -52,9 +58,7 @@ class CreateGroupScreen extends StatelessWidget {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                        //TODO: crear grupo
-                      },
+                      onPressed: () => context.read<CreateGroupCubit>().createGroup(),
                       child: const Text('Crear'),
                     ),
                   ],

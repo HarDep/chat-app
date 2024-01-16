@@ -1,5 +1,6 @@
 import 'dart:io';
-
+import 'package:chat_app/domain/repositories/image_picker_repository.dart';
+import 'package:chat_app/domain/use_cases/profile_sign_in_use_case.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,20 +13,21 @@ class ProfileState {
 
 class ProfileVerifyCubit extends Cubit<ProfileState> {
   final nameController = TextEditingController();
+  final ImagePickerRepository imagePickerRepository;
+  final ProfileSignInUseCase profileSignInUseCase;
 
-  ProfileVerifyCubit() : super(ProfileState());
+  ProfileVerifyCubit(this.imagePickerRepository, this.profileSignInUseCase)
+      : super(ProfileState());
 
-  void pickImage() {
-    //TODO: lamar servicios
-    final file = File('');
-    // final name = nameController.text;
+  void pickImage() async {
+    final file = await imagePickerRepository.pickImage();
     emit(ProfileState(file: file));
   }
 
   void getReady() async {
-    //TODO: crear cuenta
-    await Future.delayed(const Duration(seconds: 2));
     final file = state.file;
+    final name = nameController.text;
+    await profileSignInUseCase.verify(ProfileInput(name: name, file: file!));
     emit(ProfileState(file: file, success: true));
   }
 }

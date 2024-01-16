@@ -10,7 +10,7 @@ class VerifyProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ProfileVerifyCubit(),
+      create: (context) => ProfileVerifyCubit(context.read(), context.read()),
       child: BlocConsumer<ProfileVerifyCubit, ProfileState>(
         listener: (context, state) {
           if (state.success) {
@@ -25,6 +25,9 @@ class VerifyProfileScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text('Verifica tu identidad'),
+                    if(state.file != null)
+                    Image.file(state.file!, height: 100,)
+                    else
                     const Placeholder(
                       fallbackHeight: 100,
                       fallbackWidth: 100,

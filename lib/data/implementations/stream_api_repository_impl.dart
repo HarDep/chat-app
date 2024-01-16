@@ -10,8 +10,9 @@ class StreamApiRepositoryImpl implements StreamApiRepository {
 
   @override
   Future<bool> connectIfExists(String userId) async {
-    // TODO: implement connectIfExists
-    return false;
+    final token = await getToken(userId);
+    await _client.connectUser(User(id: userId), token);
+    return _client.state.currentUser != null;
   }
 
   @override
@@ -21,6 +22,7 @@ class StreamApiRepositoryImpl implements StreamApiRepository {
       extraData['image'] = user.image;
     }
     extraData['name'] = user.name;
+    await _client.disconnectUser();
     await _client.connectUser(User(id: user.id, extraData: extraData), token);
     return user;
   }

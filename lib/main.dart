@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MultiRepositoryProvider(
       providers: buildRepositories(_streamChatClient),
       child: BlocProvider(
-        create: (_) => ThemeCubit()..init(),
+        create: (context) => ThemeCubit(context.read())..init(),
         child: BlocBuilder<ThemeCubit, bool>(
           builder: (_, state) {
             return MaterialApp(

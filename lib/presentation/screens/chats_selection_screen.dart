@@ -1,4 +1,5 @@
 import 'package:chat_app/presentation/providers/chats_selection_cubit.dart';
+import 'package:chat_app/presentation/screens/channel_screen.dart';
 import 'package:chat_app/presentation/screens/create_group_screen.dart';
 import 'package:chat_app/utils/navigator_utils.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,8 @@ class ChatsSelectionScreen extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => IsGroupCubit()),
-        BlocProvider(create: (_) => ChatSelectionCubit()..init()),
+        BlocProvider(
+            create: (context) => ChatSelectionCubit(context.read())..init()),
       ],
       child: BlocBuilder<IsGroupCubit, bool>(
         builder: (context, isGroup) {
@@ -23,10 +25,8 @@ class ChatsSelectionScreen extends StatelessWidget {
               return Scaffold(
                 floatingActionButton: isGroup && selectedUsers.isNotEmpty
                     ? FloatingActionButton(
-                        onPressed: () {
-                          pushReplacementPage(
-                              context, CreateGroupScreen( selectedUsers: selectedUsers,));
-                        },
+                        onPressed: () => 
+                        pushReplacementPage(context, CreateGroupScreen(selectedUsers: selectedUsers,),),
                       )
                     : null,
                 body: SafeArea(
@@ -92,15 +92,22 @@ class ChatsSelectionScreen extends StatelessWidget {
                         child: ListView.builder(
                           itemCount: chatsState.length,
                           scrollDirection: Axis.vertical,
-                          itemBuilder: (_, index) {
+                          itemBuilder: (context, index) {
                             final user = chatsState[index];
                             return ListTile(
-                              onTap: () {
+                              onTap: () async{
                                 if (!isGroup) {
-                                  //TODO: ir al chat
+                                  final channel = await context
+                                      .read<ChatSelectionCubit>()
+                                      .createSingleChat(user);
+                                  // ignore: use_build_context_synchronously
+                                  pushReplacementPage(context, ChannelScreen(channel: channel,));
                                 }
                               },
-                              leading: const CircleAvatar(),
+                              leading: CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage(user.chatUser.image!),
+                              ),
                               title: Text(user.chatUser.name),
                               trailing: isGroup
                                   ? Checkbox(
