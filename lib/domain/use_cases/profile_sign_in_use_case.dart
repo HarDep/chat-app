@@ -8,9 +8,9 @@ import 'package:chat_app/domain/repositories/upload_storage_repository.dart';
 
 class ProfileInput {
   final String name;
-  final File file;
+  final File? file;
 
-  ProfileInput({required this.name, required this.file});
+  ProfileInput({required this.name, this.file});
 }
 
 class ProfileSignInUseCase {
@@ -26,11 +26,11 @@ class ProfileSignInUseCase {
   Future<void> verify(ProfileInput input) async {
     final auth = await authRepository.getAuthUser();
     final token = await streamApiRepository.getToken(auth!.id);
-    //TODO: si no escogo imagen?
-    final image = await uploadStorageRepository.uploadPhoto(
-        input.file, 'users/${auth.id}');
-    await streamApiRepository.connectUser(
-        ChatUser(name: input.name, id: auth.id, image: image), token);
+    String? image;
+    if (input.file != null) {
+      image = await uploadStorageRepository.uploadPhoto(input.file!, 'users/${auth.id}');
+    }
+    await streamApiRepository.connectUser(ChatUser(name: input.name, id: auth.id, image: image), token);
   }
 
   Future<AuthUser?> signIn() async {

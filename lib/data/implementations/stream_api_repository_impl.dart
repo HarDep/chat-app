@@ -30,17 +30,21 @@ class StreamApiRepositoryImpl implements StreamApiRepository {
   @override
   Future<Channel> createGroup(String id, String name, List<String> members,
       {String? image}) async {
-    final channel = _client.channel('messaging', id: id, extraData: {
+    Map<String, dynamic> extraData = {
       'name': name,
-      'image': image, //y si no hay?
       'members': [_client.state.currentUser!.id, ...members],
-    });
+    };
+    if(image != null){
+      extraData['image'] = image;
+    }
+    final channel = _client.channel('messaging', id: id, extraData: extraData);
     await channel.watch();
     return channel;
   }
 
   @override
   Future<Channel> createSingleChat(String friendId) async {
+    //TODO: y si ya existe?
     final channel = _client.channel('messaging',
         id: '${_client.state.currentUser!.id.hashCode}${friendId.hashCode}',
         extraData: {
@@ -66,6 +70,7 @@ class StreamApiRepositoryImpl implements StreamApiRepository {
 
   @override
   Future<String> getToken(String userId) async {
+    //TODO: token
     final token = _client.devToken(userId).rawValue;
     return token;
   }

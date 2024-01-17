@@ -27,7 +27,7 @@ class CreateGroupCubit extends Cubit<CreationGroupState> {
     final name = nameTextController.text;
     final membs = members.map((e) => e.chatUser.id).toList();
     final channel = await createGroupUseCase.createGroup(
-        CreateGroupInput(name: name, file: state.file!, members: membs));
+        CreateGroupInput(name: name, file: state.file, members: membs));
     emit(CreationGroupState(file: state.file, channel: channel));
   }
 
