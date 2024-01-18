@@ -41,7 +41,9 @@ class AuthRepositoryImpl implements AuthRepository {
         }
       }
       return null;
-    } catch (e) {
+    } on Exception catch (e) {
+      //TODO: llega aqui
+      print(e);
       throw Exception('sign in error $e');
     }
   }

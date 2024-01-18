@@ -1,3 +1,4 @@
+import 'package:chat_app/firebase_options.dart';
 import 'package:chat_app/presentation/providers/theme_cubit.dart';
 import 'package:chat_app/presentation/screens/splash_screen.dart';
 import 'package:chat_app/utils/dependencies_util.dart';
@@ -8,12 +9,12 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final _streamChatClient = StreamChatClient('');
+  final _streamChatClient = StreamChatClient('u3377bevwec2');
   MyApp({super.key});
 
   @override
