@@ -12,15 +12,13 @@ class ChannelScreen extends StatelessWidget {
         channel: channel,
         child: const Scaffold(
           appBar: StreamChannelHeader(),
-          body: SafeArea(
-            child: Column(
-              children: [
-                Expanded(
-                  child: StreamMessageListView(),
-                ),
-                StreamMessageInput()
-              ],
-            ),
+          body: Column(
+            children: [
+              Expanded(
+                child: StreamMessageListView(),
+              ),
+              StreamMessageInput()
+            ],
           ),
         ),
       ),

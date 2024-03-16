@@ -21,48 +21,46 @@ class CreateGroupScreen extends StatelessWidget {
         },
         builder: (context, state) {
           return Scaffold(
-            body: SafeArea(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text('Verifica tus datos'),
-                    if(state.file != null)
-                    Image.file(state.file!, height: 100,)
-                    else
-                    const Placeholder(
-                      fallbackHeight: 100,
-                      fallbackWidth: 100,
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Verifica tus datos'),
+                  if(state.file != null)
+                  Image.file(state.file!, height: 100,)
+                  else
+                  const Placeholder(
+                    fallbackHeight: 100,
+                    fallbackWidth: 100,
+                  ),
+                  IconButton(
+                    onPressed: () => context.read<CreateGroupCubit>().pickImage(),
+                    icon: const Icon(Icons.photo),
+                  ),
+                  TextField(
+                    controller:
+                        context.read<CreateGroupCubit>().nameTextController,
+                    decoration: const InputDecoration(
+                      hintText: 'Nombre del grupo',
                     ),
-                    IconButton(
-                      onPressed: () => context.read<CreateGroupCubit>().pickImage(),
-                      icon: const Icon(Icons.photo),
-                    ),
-                    TextField(
-                      controller:
-                          context.read<CreateGroupCubit>().nameTextController,
-                      decoration: const InputDecoration(
-                        hintText: 'Nombre del grupo',
+                  ),
+                  Wrap(
+                    children: List.generate(
+                      selectedUsers.length,
+                      (index) => Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const CircleAvatar(),
+                          Text(selectedUsers[index].chatUser.name)
+                        ],
                       ),
                     ),
-                    Wrap(
-                      children: List.generate(
-                        selectedUsers.length,
-                        (index) => Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const CircleAvatar(),
-                            Text(selectedUsers[index].chatUser.name)
-                          ],
-                        ),
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () => context.read<CreateGroupCubit>().createGroup(),
-                      child: const Text('Crear'),
-                    ),
-                  ],
-                ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => context.read<CreateGroupCubit>().createGroup(),
+                    child: const Text('Crear'),
+                  ),
+                ],
               ),
             ),
           );

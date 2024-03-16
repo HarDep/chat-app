@@ -23,106 +23,108 @@ class ChatsSelectionScreen extends StatelessWidget {
               final selectedUsers =
                   context.read<ChatSelectionCubit>().selectedUsers;
               return Scaffold(
+                appBar: AppBar(
+                  centerTitle: true,
+                  title: Text( isGroup? 'Nuevo grupo' : 'Contactos'),
+                ),
                 floatingActionButton: isGroup && selectedUsers.isNotEmpty
                     ? FloatingActionButton(
                         onPressed: () => 
                         pushReplacementPage(context, CreateGroupScreen(selectedUsers: selectedUsers,),),
                       )
                     : null,
-                body: SafeArea(
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          BackButton(
-                            onPressed: () {
-                              if (isGroup) {
-                                context.read<IsGroupCubit>().change();
-                                return;
-                              }
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          Text(isGroup ? 'Nuevo grupo' : 'Personas'),
-                        ],
-                      ),
-                      if (!isGroup)
-                        ElevatedButton(
-                          onPressed: () =>
-                              context.read<IsGroupCubit>().change(),
-                          child: const Text('Crear grupo'),
-                        )
-                      else if (isGroup && selectedUsers.isEmpty)
-                        const Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CircleAvatar(),
-                            Text('Añadir integrantes'),
-                          ],
-                        )
-                      else
-                        SizedBox(
-                          height: 100,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: selectedUsers.length,
-                            itemBuilder: (_, index) {
-                              final user = selectedUsers[index];
-                              return Stack(
-                                children: [
-                                  Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const CircleAvatar(),
-                                      Text(user.chatUser.name),
-                                    ],
-                                  ),
-                                  IconButton(
-                                    onPressed: () => context
-                                        .read<ChatSelectionCubit>()
-                                        .selectUser(user),
-                                    icon: const Icon(Icons.delete),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
+                body: Column(
+                  children: [
+                    /* Row(
+                      children: [
+                        BackButton(
+                          onPressed: () {
+                            if (isGroup) {
+                              context.read<IsGroupCubit>().change();
+                              return;
+                            }
+                            Navigator.of(context).pop();
+                          },
                         ),
-                      Expanded(
+                        Text(isGroup ? 'Nuevo grupo' : 'Personas'),
+                      ],
+                    ), */
+                    if (!isGroup)
+                      ElevatedButton(
+                        onPressed: () =>
+                            context.read<IsGroupCubit>().change(),
+                        child: const Text('Crear grupo'),
+                      )
+                    else if (isGroup && selectedUsers.isEmpty)
+                      const Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircleAvatar(),
+                          Text('Añadir integrantes'),
+                        ],
+                      )
+                    else
+                      SizedBox(
+                        height: 100,
                         child: ListView.builder(
-                          itemCount: chatsState.length,
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (context, index) {
-                            final user = chatsState[index];
-                            return ListTile(
-                              onTap: () async{
-                                if (!isGroup) {
-                                  final channel = await context
+                          scrollDirection: Axis.horizontal,
+                          itemCount: selectedUsers.length,
+                          itemBuilder: (_, index) {
+                            final user = selectedUsers[index];
+                            return Stack(
+                              children: [
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const CircleAvatar(),
+                                    Text(user.chatUser.name),
+                                  ],
+                                ),
+                                IconButton(
+                                  onPressed: () => context
                                       .read<ChatSelectionCubit>()
-                                      .createSingleChat(user);
-                                  // ignore: use_build_context_synchronously
-                                  pushReplacementPage(context, ChannelScreen(channel: channel,));
-                                }
-                              },
-                              leading: CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(user.chatUser.image!),
-                              ),
-                              title: Text(user.chatUser.name),
-                              trailing: isGroup
-                                  ? Checkbox(
-                                      value: user.isSelected,
-                                      onChanged: (value) => context
-                                          .read<ChatSelectionCubit>()
-                                          .selectUser(user),
-                                    )
-                                  : null,
+                                      .selectUser(user),
+                                  icon: const Icon(Icons.delete),
+                                ),
+                              ],
                             );
                           },
                         ),
                       ),
-                    ],
-                  ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: chatsState.length,
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (context, index) {
+                          final user = chatsState[index];
+                          return ListTile(
+                            onTap: () async{
+                              if (!isGroup) {
+                                final channel = await context
+                                    .read<ChatSelectionCubit>()
+                                    .createSingleChat(user);
+                                // ignore: use_build_context_synchronously
+                                pushReplacementPage(context, ChannelScreen(channel: channel,));
+                              }
+                            },
+                            leading: CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(user.chatUser.image!),
+                            ),
+                            title: Text(user.chatUser.name),
+                            trailing: isGroup
+                                ? Checkbox(
+                                    value: user.isSelected,
+                                    onChanged: (value) => context
+                                        .read<ChatSelectionCubit>()
+                                        .selectUser(user),
+                                  )
+                                : null,
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               );
             },

@@ -22,20 +22,18 @@ class SignInScreen extends StatelessWidget {
         },
         builder: (context, state) {
           return Scaffold(
-            body: SafeArea(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text('Bienvenido a Chat App'),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.read<SignInCubit>().signIn();
-                      },
-                      child: const Text('Conectar con Google'),
-                    ),
-                  ],
-                ),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Bienvenido a Chat App'),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<SignInCubit>().signIn();
+                    },
+                    child: const Text('Conectar con Google'),
+                  ),
+                ],
               ),
             ),
           );

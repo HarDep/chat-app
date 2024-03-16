@@ -34,7 +34,7 @@ class StreamApiRepositoryImpl implements StreamApiRepository {
       'name': name,
       'members': [_client.state.currentUser!.id, ...members],
     };
-    if(image != null){
+    if (image != null) {
       extraData['image'] = image;
     }
     final channel = _client.channel('messaging', id: id, extraData: extraData);

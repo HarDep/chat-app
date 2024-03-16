@@ -29,12 +29,10 @@ class SplashScreen extends StatelessWidget {
             title: const Text('Splash'),
             centerTitle: true,
           ),
-          body: SafeArea(
-            child: Center(
-              child: ElevatedButton(
-                onPressed: () {},
-                child: const Text('iniciar'),
-              ),
+          body: Center(
+            child: ElevatedButton(
+              onPressed: () {},
+              child: const Text('iniciar'),
             ),
           ),
         ),

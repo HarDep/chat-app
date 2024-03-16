@@ -2,7 +2,7 @@ import 'package:chat_app/presentation/providers/home_cubit.dart';
 import 'package:chat_app/presentation/screens/chats_screen.dart';
 import 'package:chat_app/presentation/screens/chats_selection_screen.dart';
 import 'package:chat_app/presentation/screens/settings_screen.dart';
-import 'package:chat_app/utils/navigator_utils.dart';
+// import 'package:chat_app/utils/navigator_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,27 +14,23 @@ class HomeScreeen extends StatelessWidget {
     return BlocProvider(
       create: (context) => HomeCubit(),
       child: Scaffold(
-        body: SafeArea(
-          child: Expanded(
-            child: Column(
-              children: [
-                Expanded(
-                  child: BlocBuilder<HomeCubit, int>(
-                    builder: (context, state) {
-                      return IndexedStack(
-                        index: state,
-                        children: const [
-                          ChatsScreen(),
-                          SettingsScreen(),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-                const _NavigationBar(),
-              ],
+        body: Column(
+          children: [
+            Expanded(
+              child: BlocBuilder<HomeCubit, int>(
+                builder: (context, state) {
+                  return IndexedStack(
+                    index: state,
+                    children: const [
+                      ChatsScreen(),
+                      SettingsScreen(),
+                    ],
+                  );
+                },
+              ),
             ),
-          ),
+            const _NavigationBar(),
+          ],
         ),
       ),
     );
@@ -57,7 +53,10 @@ class _NavigationBar extends StatelessWidget {
           ),
           FloatingActionButton(
             onPressed: () {
-              pushPage(context, const ChatsSelectionScreen());
+              // pushPage(context, const ChatsSelectionScreen());
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const ChatsSelectionScreen()),
+              );
             },
             child: const Icon(Icons.add),
           ),
